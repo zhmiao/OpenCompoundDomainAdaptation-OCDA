@@ -1,0 +1,44 @@
+# common
+datadir: '/home/zhmiao/datasets/multipie/cropped'
+src: 'mp05'
+tgt: 'multi'
+tgt_list: ['mp05', 'mp08', 'mp09', 'mp13', 'mp14']
+
+# model
+base_model: 'AMN_res'
+style_model: 'StyleBackbone'
+num_cls: 6
+
+# optim
+betas: [0.9, 0.999]
+weight_decay: 0
+batch: 128
+
+# source
+src_lr: 0.0001
+src_num_epoch: 100
+
+# dme
+dme_lr: 0.00001
+dme_num_epoch: 200
+
+# disentangle
+style_lr: 0.0001
+gamma_dispell: 1
+gamma_rec: 10
+fake_label_type: 'random'
+#style_num_epoch: 400
+style_num_epoch: 200
+
+# scheduled
+norm_style: True
+style_cond: 2
+# style_cond: 3
+num_epoch_scheduled: 200
+# schedule_strategy: "expand"
+schedule_strategy: "shift"
+#initial_ratio: 0.5
+initial_ratio: 0.5
+#power: 0.3
+power: 0.3
+scheduled_dme_lr: 0.0001

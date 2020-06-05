@@ -1,0 +1,11 @@
+*__pycache__*
+*.ipynb_checkpoints*
+*results*
+*hide*
+*.swp
+train_slurm.sh
+test_slurm.sh
+logs
+/data
+source.sh
+*.idea*
