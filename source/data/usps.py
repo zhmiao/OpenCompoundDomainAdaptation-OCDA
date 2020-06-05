@@ -7,19 +7,15 @@ from PIL import Image
 from torch.utils import data
 
 # Within package imports
-from .data_loader import register_dataset_obj, register_data_params
+from .utils import register_dataset_obj, register_data_params
+from .utils import DatasetParams
 from . import utils
-from .data_loader import DatasetParams
 
 @register_data_params('usps')
 class USPSParams(DatasetParams):
     
     num_channels = 1
     image_size   = 16
-    #mean = 0.1307
-    #std = 0.30
-    #mean         = 0.254
-    #std          = 0.369
     mean = 0.5
     std = 0.5
     num_cls      = 10

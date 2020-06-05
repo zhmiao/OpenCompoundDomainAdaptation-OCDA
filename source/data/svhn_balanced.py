@@ -1,6 +1,6 @@
 from torchvision import datasets, transforms
-from .data_loader import DatasetParams
-from .data_loader import register_dataset_obj, register_data_params
+from .utils import DatasetParams
+from .utils import register_dataset_obj, register_data_params
 
 import numpy as np
 

@@ -1,6 +1,6 @@
 from torchvision import datasets
-from .data_loader import DatasetParams
-from .data_loader import register_dataset_obj, register_data_params
+from .utils import DatasetParams
+from .utils import register_dataset_obj, register_data_params
 
 @register_data_params('mnist')
 class MNIStParams(DatasetParams):

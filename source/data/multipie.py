@@ -2,9 +2,8 @@ import os.path
 from PIL import Image
 from torch.utils.data import Dataset
 
-# Within package imports
-from .data_loader import register_dataset_obj, register_data_params
-from .data_loader import DatasetParams
+from .utils import register_dataset_obj, register_data_params
+from .utils import DatasetParams
 
 class MPParams(DatasetParams):
     

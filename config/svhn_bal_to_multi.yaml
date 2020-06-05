@@ -27,8 +27,7 @@ style_lr: 0.0001
 gamma_dispell: 1
 gamma_rec: 10
 fake_label_type: 'random'
-#style_num_epoch: 400
-style_num_epoch: 200
+style_num_epoch: 20
 
 # scheduled
 norm_style: True

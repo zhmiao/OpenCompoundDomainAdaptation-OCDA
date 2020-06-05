@@ -2,7 +2,6 @@ import numpy as np
 
 from torch.utils.data.sampler import Sampler
 
-import pdb
 
 class DomainScheduledSampler(Sampler):
     '''

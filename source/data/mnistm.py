@@ -1,16 +1,9 @@
-import gzip
 import os.path
 
-from urllib.parse import urljoin
-import numpy as np
-from PIL import Image
-from torch.utils import data
 from torchvision import datasets
 
-# Within package imports
-from .data_loader import register_dataset_obj, register_data_params
-from . import utils
-from .data_loader import DatasetParams
+from .utils import register_dataset_obj, register_data_params
+from .utils import DatasetParams
 
 @register_data_params('mnistm')
 class MNISTMParams(DatasetParams):
