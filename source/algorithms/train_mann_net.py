@@ -25,8 +25,8 @@ def train_epoch(loader_src, loader_tgt, net, opt_net, opt_dis, opt_selector, opt
 
     for batch_idx, ((data_s, _), (data_t, _)) in enumerate(joint_loader):
         
-        # log basic dme train info
-        info_str = "[Train Dme] Epoch: {} [{}/{} ({:.2f}%)]".format(epoch, batch_idx*len(data_t),
+        # log basic mann train info
+        info_str = "[Train Mann] Epoch: {} [{}/{} ({:.2f}%)]".format(epoch, batch_idx*len(data_t),
                                                                     N, 100 * batch_idx / N)
    
         ########################
@@ -64,7 +64,8 @@ def train_epoch(loader_src, loader_tgt, net, opt_net, opt_dis, opt_selector, opt
 
         # computing concept selector
         concept_selector = net.fc_selector(x_t.clone()).tanh()
-        x_t = direct_feature + concept_selector * memory_feature
+        class_enhancer = concept_selector * memory_feature
+        x_t = direct_feature + class_enhancer
 
         # apply cosine norm classifier
         score_t = net.classifier(x_t.clone())
@@ -129,7 +130,8 @@ def train_epoch(loader_src, loader_tgt, net, opt_net, opt_dis, opt_selector, opt
 
             # computing concept selector
             concept_selector = net.fc_selector(x_t.clone()).tanh()
-            x_t = direct_feature + concept_selector * memory_feature
+            class_enhancer = concept_selector * memory_feature
+            x_t = direct_feature + class_enhancer
 
             # apply cosine norm classifier
             score_t = net.classifier(x_t.clone())
@@ -164,21 +166,21 @@ def train_epoch(loader_src, loader_tgt, net, opt_net, opt_dis, opt_selector, opt
     return last_update
 
 
-def train_dme_multi(args):
+def train_mann_multi(args):
 
-    """Main function for training DME."""
+    """Main function for training mann."""
 
     src = args.src
     tgt = args.tgt
     base_model = args.base_model
     num_cls = args.num_cls
     tgt_list = args.tgt_list
-    num_epoch = args.dme_num_epoch
+    num_epoch = args.mann_num_epoch
     batch = args.batch
     datadir = args.datadir
-    outdir = args.outdir_dme
+    outdir = args.outdir_mann
     src_weights = args.src_net_file
-    lr = args.dme_lr
+    lr = args.mann_lr
     betas = tuple(args.betas)
     weight_decay = args.weight_decay
     centroids_path = args.centroids_src_file
@@ -195,13 +197,13 @@ def train_dme_multi(args):
         kwargs = {}
 
     # setup network 
-    net = get_model('DmeNet', model=base_model, num_cls=num_cls,
+    net = get_model('MannNet', model=base_model, num_cls=num_cls,
                     src_weights_init=src_weights,
                     centroids_path=centroids_path, feat_dim=feat_dim)
     
     # print network and arguments
     print(net)
-    print('Training Dme {} model for {}->{}'.format(base_model, src, tgt))
+    print('Training Mann {} model for {}->{}'.format(base_model, src, tgt))
 
     #######################################
     # Setup data for training and testing #
@@ -227,7 +229,7 @@ def train_dme_multi(args):
                                 weight_decay=weight_decay, betas=betas)
 
     ##############
-    # Train Dme #
+    # Train mann #
     ##############
     for epoch in range(num_epoch):
         err = train_epoch(train_src_data, train_tgt_data, net, opt_net, opt_dis, opt_selector, opt_classifier, epoch) 
@@ -239,7 +241,7 @@ def train_dme_multi(args):
     # Save Model #
     ##############
     os.makedirs(outdir, exist_ok=True)
-    outfile = join(outdir, 'dme_{:s}_net_{:s}_{:s}.pth'.format(base_model, src, tgt))
+    outfile = join(outdir, 'mann_{:s}_net_{:s}_{:s}.pth'.format(base_model, src, tgt))
     print('Saving to', outfile)
     net.save(outfile)
 

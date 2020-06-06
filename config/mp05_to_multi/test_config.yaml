@@ -6,7 +6,7 @@ tgt_list: ['mp05', 'mp08', 'mp09', 'mp13', 'mp14']
 
 # model
 base_model: 'AMN_res'
-style_model: 'StyleBackbone'
+domain_factor_model: 'DomainFactorBackbone'
 num_cls: 6
 
 # optim
@@ -18,22 +18,22 @@ batch: 128
 src_lr: 0.0001
 src_num_epoch: 100
 
-# dme
-dme_lr: 0.00001
-dme_num_epoch: 200
+# mann
+mann_lr: 0.00001
+mann_num_epoch: 200
 
 # disentangle
-style_lr: 0.0001
+domain_factor_lr: 0.0001
 gamma_dispell: 1
 gamma_rec: 10
 fake_label_type: 'random'
-#style_num_epoch: 400
-style_num_epoch: 200
+#domain_factor_num_epoch: 400
+domain_factor_num_epoch: 200
 
 # scheduled
-norm_style: True
-style_cond: 2
-# style_cond: 3
+norm_domain_factor: True
+domain_factor_cond: 2
+# domain_factor_cond: 3
 num_epoch_scheduled: 200
 # schedule_strategy: "expand"
 schedule_strategy: "shift"
@@ -41,4 +41,4 @@ schedule_strategy: "shift"
 initial_ratio: 0.5
 #power: 0.3
 power: 0.3
-scheduled_dme_lr: 0.0001
+scheduled_mann_lr: 0.0001

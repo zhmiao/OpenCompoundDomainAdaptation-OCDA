@@ -2,7 +2,7 @@ import torch
 import torch.nn as nn
 from .utils import register_model
 from .utils import init_weights
-from . import CosNormClassifier, DiscCentroidsLoss
+from . import cos_norm_classifier, disc_centroids_loss
 
 import torchvision.models as models
 
@@ -19,7 +19,7 @@ class MemoryNet(nn.Module):
         self.num_cls = num_cls
         self.setup_net()
         self.criterion_cls = nn.CrossEntropyLoss()
-        self.criterion_ctr = DiscCentroidsLoss.create_loss(feat_dim, num_cls)
+        self.criterion_ctr = disc_centroids_loss.create_loss(feat_dim, num_cls)
         if weights_init is not None:
             self.load(weights_init)
         else:
@@ -67,7 +67,7 @@ class AMNClassifier(MemoryNet):
                 nn.BatchNorm1d(512),
                 )
 
-        self.classifier = CosNormClassifier.create_model(512, self.num_cls)
+        self.classifier = cos_norm_classifier.create_model(512, self.num_cls)
 
     def forward(self, x, with_ft=True):
         x = self.conv_params(x)
@@ -96,7 +96,7 @@ class AMNClassifier_res(MemoryNet):
         resnet18 = models.resnet18(pretrained=False)
         modules_resnet18 = list(resnet18.children())[:-1]
         self.feat_model = nn.Sequential(*modules_resnet18)
-        self.classifier = CosNormClassifier.create_model(512, self.num_cls)
+        self.classifier = cos_norm_classifier.create_model(512, self.num_cls)
 
     def forward(self, x, with_ft=True):
         x = self.feat_model(x)

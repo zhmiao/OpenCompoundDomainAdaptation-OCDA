@@ -2,24 +2,24 @@ import numpy as np
 import torch
 import torch.nn as nn
 from .utils import register_model, get_model
-from . import CosNormClassifier
+from . import cos_norm_classifier
 
 
-@register_model('DmeNet')
-class DmeNet(nn.Module):
+@register_model('MannNet')
+class MannNet(nn.Module):
 
     """Defines a Dynamic Meta-Embedding Network."""
 
     def __init__(self, num_cls=10, model='LeNet', src_weights_init=None,
-                 weights_init=None, use_style_selector=False, centroids_path=None, feat_dim=512):
+                 weights_init=None, use_domain_factor_selector=False, centroids_path=None, feat_dim=512):
 
-        super(DmeNet, self).__init__()
+        super(MannNet, self).__init__()
 
-        self.name = 'DmeNet'
+        self.name = 'MannNet'
         self.base_model = model
         self.num_cls = num_cls
         self.feat_dim = feat_dim
-        self.use_style_selector = use_style_selector
+        self.use_domain_factor_selector = use_domain_factor_selector
         self.cls_criterion = nn.CrossEntropyLoss()
         self.gan_criterion = nn.CrossEntropyLoss()
 
@@ -34,7 +34,7 @@ class DmeNet(nn.Module):
         elif src_weights_init is not None:
             self.load_src_net(src_weights_init)
         else:
-            raise Exception('DmeNet must be initialized with weights.')
+            raise Exception('MannNet must be initialized with weights.')
 
     def forward(self, x_s, x_t):
 
@@ -70,10 +70,10 @@ class DmeNet(nn.Module):
 
         self.fc_selector = nn.Linear(self.feat_dim, self.feat_dim)
 
-        if self.use_style_selector:
-            self.style_selector = nn.Linear(self.feat_dim, self.feat_dim)
+        if self.use_domain_factor_selector:
+            self.domain_factor_selector = nn.Linear(self.feat_dim, self.feat_dim)
 
-        self.classifier = CosNormClassifier.create_model(self.feat_dim, self.num_cls)
+        self.classifier = cos_norm_classifier.create_model(self.feat_dim, self.num_cls)
 
         self.image_size = self.src_net.image_size
         self.num_channels = self.src_net.num_channels

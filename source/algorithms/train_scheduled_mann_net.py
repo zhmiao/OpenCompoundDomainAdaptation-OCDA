@@ -14,8 +14,8 @@ from ..data.sampler import DomainScheduledSampler
 import pdb
 
 
-def train_epoch(loader_src, loader_tgt, net, style_net, opt_net, opt_dis,
-                opt_selector_content, opt_selector_style, opt_classifier, epoch, the=0.6, style_cond=0):
+def train_epoch(loader_src, loader_tgt, net, domain_factor_net, opt_net, opt_dis,
+                opt_selector_content, opt_selector_domain_factor, opt_classifier, epoch, the=0.6, domain_factor_cond=0):
    
     log_interval = 10  # specifies how often to display
   
@@ -23,7 +23,7 @@ def train_epoch(loader_src, loader_tgt, net, style_net, opt_net, opt_dis,
     joint_loader = zip(loader_src, loader_tgt)
 
     net.train()
-    style_net.eval()
+    domain_factor_net.eval()
    
     last_update = -1
 
@@ -32,8 +32,8 @@ def train_epoch(loader_src, loader_tgt, net, style_net, opt_net, opt_dis,
         if len(data_s) == 1 or len(data_t) == 1:  # BN protection
             continue
 
-        # log basic dme train info
-        info_str = "[Train Schedule Dme] Epoch: {} [{}/{} ({:.2f}%)]".format(epoch, batch_idx * len(data_t),
+        # log basic mann train info
+        info_str = "[Train Schedule Mann] Epoch: {} [{}/{} ({:.2f}%)]".format(epoch, batch_idx * len(data_t),
                                                                              N, 100 * batch_idx * len(data_t) / N)
    
         ########################
@@ -66,36 +66,36 @@ def train_epoch(loader_src, loader_tgt, net, style_net, opt_net, opt_dis,
         values_memory = values_memory.softmax(dim=1)
         memory_feature = torch.matmul(values_memory, keys_memory)
 
-        if style_cond == 0:
+        if domain_factor_cond == 0:
             # computing concept selector
             concept_selector = net.fc_selector(x_t.clone()).tanh()
             x_t = direct_feature + concept_selector * memory_feature
-        elif style_cond == 1:
+        elif domain_factor_cond == 1:
             with torch.no_grad():
-                style_ftr = style_net(data_t).detach()
-            style_selector = net.style_selector(x_t).tanh()
-            x_t = direct_feature + style_selector * style_ftr
-        elif style_cond == 2:
+                domain_factor_ftr = domain_factor_net(data_t).detach()
+            domain_factor_selector = net.domain_factor_selector(x_t).tanh()
+            x_t = direct_feature + domain_factor_selector * domain_factor_ftr
+        elif domain_factor_cond == 2:
             # computing concept selector
             concept_selector = net.fc_selector(x_t.clone()).tanh()
             with torch.no_grad():
-                style_ftr = style_net(data_t.clone()).detach()
-            style_selector = net.style_selector(x_t.clone()).tanh()
-            x_t = direct_feature + concept_selector * memory_feature + 0.01 * style_selector * style_ftr
-        elif style_cond == 3:
+                domain_factor_ftr = domain_factor_net(data_t.clone()).detach()
+            domain_factor_selector = net.domain_factor_selector(x_t.clone()).tanh()
+            x_t = direct_feature + concept_selector * memory_feature + 0.01 * domain_factor_selector * domain_factor_ftr
+        elif domain_factor_cond == 3:
             with torch.no_grad():
-                style_ftr = style_net(data_t.clone()).detach()
-            domain_indicator = net.style_selector(style_ftr.clone()).tanh()
+                domain_factor_ftr = domain_factor_net(data_t.clone()).detach()
+            domain_indicator = net.domain_factor_selector(domain_factor_ftr.clone()).tanh()
             x_t = direct_feature + domain_indicator * memory_feature
-        elif style_cond == 4:
+        elif domain_factor_cond == 4:
             # computing concept selector
             concept_selector = net.fc_selector(x_t.clone()).tanh()
             with torch.no_grad():
-                style_ftr = style_net(data_t.clone()).detach()
-            style_selector = net.style_selector(style_ftr.clone()).tanh()
-            x_t = direct_feature + style_selector * concept_selector * memory_feature
+                domain_factor_ftr = domain_factor_net(data_t.clone()).detach()
+            domain_factor_selector = net.domain_factor_selector(domain_factor_ftr.clone()).tanh()
+            x_t = direct_feature + domain_factor_selector * concept_selector * memory_feature
         else:
-            raise Exception("No such style_cond: {}".format(style_cond))
+            raise Exception("No such domain_factor_cond: {}".format(domain_factor_cond))
 
         # apply cosine norm classifier
         score_t = net.classifier(x_t.clone())
@@ -154,36 +154,36 @@ def train_epoch(loader_src, loader_tgt, net, style_net, opt_net, opt_dis,
             values_memory = values_memory.softmax(dim=1)
             memory_feature = torch.matmul(values_memory, keys_memory)
 
-            if style_cond == 0:
+            if domain_factor_cond == 0:
                 # computing concept selector
                 concept_selector = net.fc_selector(x_t.clone()).tanh()
                 x_t = direct_feature + concept_selector * memory_feature
-            elif style_cond == 1:
+            elif domain_factor_cond == 1:
                 with torch.no_grad():
-                    style_ftr = style_net(data_t).detach()
-                style_selector = net.style_selector(x_t).tanh()
-                x_t = direct_feature + style_selector * style_ftr
-            elif style_cond == 2:
+                    domain_factor_ftr = domain_factor_net(data_t).detach()
+                domain_factor_selector = net.domain_factor_selector(x_t).tanh()
+                x_t = direct_feature + domain_factor_selector * domain_factor_ftr
+            elif domain_factor_cond == 2:
                 # computing concept selector
                 concept_selector = net.fc_selector(x_t.clone()).tanh()
                 with torch.no_grad():
-                    style_ftr = style_net(data_t.clone()).detach()
-                style_selector = net.style_selector(x_t.clone()).tanh()
-                x_t = direct_feature + concept_selector * memory_feature + 0.01 * style_selector * style_ftr
-            elif style_cond == 3:
+                    domain_factor_ftr = domain_factor_net(data_t.clone()).detach()
+                domain_factor_selector = net.domain_factor_selector(x_t.clone()).tanh()
+                x_t = direct_feature + concept_selector * memory_feature + 0.01 * domain_factor_selector * domain_factor_ftr
+            elif domain_factor_cond == 3:
                 with torch.no_grad():
-                    style_ftr = style_net(data_t).detach()
-                domain_indicator = net.style_selector(style_ftr).tanh()
+                    domain_factor_ftr = domain_factor_net(data_t).detach()
+                domain_indicator = net.domain_factor_selector(domain_factor_ftr).tanh()
                 x_t = direct_feature + domain_indicator * memory_feature
-            elif style_cond == 4:
+            elif domain_factor_cond == 4:
                 # computing concept selector
                 concept_selector = net.fc_selector(x_t.clone()).tanh()
                 with torch.no_grad():
-                    style_ftr = style_net(data_t.clone()).detach()
-                style_selector = net.style_selector(style_ftr.clone()).tanh()
-                x_t = direct_feature + style_selector * concept_selector * memory_feature
+                    domain_factor_ftr = domain_factor_net(data_t.clone()).detach()
+                domain_factor_selector = net.domain_factor_selector(domain_factor_ftr.clone()).tanh()
+                x_t = direct_feature + domain_factor_selector * concept_selector * memory_feature
             else:
-                raise Exception("No such style_cond: {}".format(style_cond))
+                raise Exception("No such domain_factor_cond: {}".format(domain_factor_cond))
 
             # apply cosine norm classifier
             score_t = net.classifier(x_t.clone())
@@ -207,8 +207,8 @@ def train_epoch(loader_src, loader_tgt, net, style_net, opt_net, opt_dis,
             opt_selector_content.zero_grad()
             opt_classifier.zero_grad()
 
-            if opt_selector_style:
-                opt_selector_style.zero_grad()
+            if opt_selector_domain_factor:
+                opt_selector_domain_factor.zero_grad()
 
             # loss backprop
             loss_gan_t.backward()
@@ -217,8 +217,8 @@ def train_epoch(loader_src, loader_tgt, net, style_net, opt_net, opt_dis,
             opt_net.step()
             opt_selector_content.step()
             opt_classifier.step()
-            if opt_selector_style:
-                opt_selector_style.step()
+            if opt_selector_domain_factor:
+                opt_selector_domain_factor.step()
 
             # log net update info
             info_str += " G: {:.3f}".format(loss_gan_t.item()) 
@@ -232,14 +232,14 @@ def train_epoch(loader_src, loader_tgt, net, style_net, opt_net, opt_dis,
     return last_update
 
 
-def train_scheduled_dme_multi(args):
+def train_scheduled_mann_multi(args):
 
-    """Main function for training DME."""
+    """Main function for training mann."""
 
     src = args.src
     tgt = args.tgt
     base_model = args.base_model
-    style_model = args.style_model
+    domain_factor_model = args.domain_factor_model
     num_cls = args.num_cls
     tgt_list = args.tgt_list
     sort_idx = args.sort_idx
@@ -251,11 +251,11 @@ def train_scheduled_dme_multi(args):
     datadir = args.datadir
     outdir = args.outdir_scheduled
     src_weights = args.src_net_file
-    style_weights = args.style_net_file
-    lr = args.scheduled_dme_lr
+    domain_factor_weights = args.domain_factor_net_file
+    lr = args.scheduled_mann_lr
     betas = tuple(args.betas)
     weight_decay = args.weight_decay
-    style_cond = args.style_cond
+    domain_factor_cond = args.domain_factor_cond
     centroids_path = args.centroids_src_file
 
     ###########################
@@ -269,20 +269,20 @@ def train_scheduled_dme_multi(args):
         kwargs = {}
 
     # setup network 
-    net = get_model('DmeNet', model=base_model, num_cls=num_cls,
+    net = get_model('MannNet', model=base_model, num_cls=num_cls,
                     src_weights_init=src_weights,
-                    use_style_selector=(style_cond != 0),
+                    use_domain_factor_selector=(domain_factor_cond != 0),
                     centroids_path=centroids_path)
 
-    style_net = deepcopy(get_model('StyleNet', num_cls=num_cls,
-                                   base_model=base_model, style_model=style_model,
-                                   weights_init=style_weights, eval=True).style_net)
+    domain_factor_net = deepcopy(get_model('DomainFactorNet', num_cls=num_cls,
+                                   base_model=base_model, domain_factor_model=domain_factor_model,
+                                   weights_init=domain_factor_weights, eval=True).domain_factor_net)
 
-    style_net.eval()
+    domain_factor_net.eval()
 
     # print network and arguments
     print(net)
-    print('Training Scheduled Dme {} model for {}->{}'.format(base_model, src, tgt))
+    print('Training Scheduled Mann {} model for {}->{}'.format(base_model, src, tgt))
 
     #######################################
     # Setup data for training and testing #
@@ -305,11 +305,11 @@ def train_scheduled_dme_multi(args):
                                       weight_decay=weight_decay, betas=betas)
     opt_classifier = optim.Adam(net.classifier.parameters(), lr=lr*0.1,
                                 weight_decay=weight_decay, betas=betas)
-    if style_cond != 0:
-        opt_selector_style = optim.Adam(net.style_selector.parameters(), lr=lr*0.1,
+    if domain_factor_cond != 0:
+        opt_selector_domain_factor = optim.Adam(net.domain_factor_selector.parameters(), lr=lr*0.1,
                                         weight_decay=weight_decay, betas=betas)
     else:
-        opt_selector_style = None
+        opt_selector_domain_factor = None
 
     #########
     # Train #
@@ -347,7 +347,7 @@ def train_scheduled_dme_multi(args):
             param_group['lr'] = actual_lr * 0.1
         for param_group in opt_classifier.param_groups:
             param_group['lr'] = actual_lr * 0.1
-        if style_cond != 0:
+        if domain_factor_cond != 0:
             for param_group in opt_net.param_groups:
                 param_group['lr'] = actual_lr * 0.1
 
@@ -362,8 +362,8 @@ def train_scheduled_dme_multi(args):
             print('Epoch: {}, using default'.format(epoch))
             train_tgt_loader = torch.utils.data.DataLoader(train_tgt_set, batch_size=batch, shuffle=True, **kwargs)
 
-        err = train_epoch(train_src_data, train_tgt_loader, net, style_net, opt_net, opt_dis, opt_selector_content,
-                          opt_selector_style, opt_classifier, epoch, style_cond=style_cond)
+        err = train_epoch(train_src_data, train_tgt_loader, net, domain_factor_net, opt_net, opt_dis, opt_selector_content,
+                          opt_selector_domain_factor, opt_classifier, epoch, domain_factor_cond=domain_factor_cond)
         # if err == -1:
         #     print("No suitable discriminator")
         #     break

@@ -40,12 +40,7 @@ def compute_source_centroids(args):
     else:
         kwargs = {}
 
-    # Eval tgt from AddaNet or TaskNet model #
-    if model == 'AddaNet':
-        net = get_model(model, num_cls=num_cls, weights_init=weights, model=base_model, feat_dim=feat_dim)
-        net = net.tgt_net
-    else:
-        net = get_model(model, num_cls=num_cls, weights_init=weights, feat_dim=feat_dim)
+    net = get_model(model, num_cls=num_cls, weights_init=weights, feat_dim=feat_dim)
 
     # Load data
     train_data = load_data_multi(data, dset, batch=batch,

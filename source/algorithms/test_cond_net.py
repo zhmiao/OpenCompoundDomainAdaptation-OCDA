@@ -9,10 +9,10 @@ from ..models.utils import get_model
 import numpy as np
 
 
-def test(loader, net, style_net, centers=False, style_cond=0, feat_exp=False, out_dir=None, dom=None):
+def test(loader, net, domain_factor_net, centers=False, domain_factor_cond=0, feat_exp=False, out_dir=None, dom=None):
 
     net.eval()
-    style_net.eval()
+    domain_factor_net.eval()
 
     test_loss = 0
     correct = 0
@@ -52,36 +52,37 @@ def test(loader, net, style_net, centers=False, style_cond=0, feat_exp=False, ou
             values_memory = values_memory.softmax(dim=1)
             memory_feature = torch.matmul(values_memory, keys_memory)
 
-            if style_cond == 0:
+            if domain_factor_cond == 0:
                 # computing concept selector
                 concept_selector = net.fc_selector(x.clone()).tanh()
-                x = direct_feature + concept_selector * memory_feature
-            elif style_cond == 1:
+                class_enhancer = concept_selector * memory_feature
+                x = direct_feature + class_enhancer
+            elif domain_factor_cond == 1:
                 with torch.no_grad():
-                    style_ftr = style_net(data).detach()
-                style_selector = net.style_selector(x).tanh()
-                x = direct_feature + style_selector * style_ftr
-            elif style_cond == 2:
+                    domain_factor_ftr = domain_factor_net(data).detach()
+                domain_factor_selector = net.domain_factor_selector(x).tanh()
+                x = direct_feature + domain_factor_selector * domain_factor_ftr
+            elif domain_factor_cond == 2:
                 # computing concept selector
                 concept_selector = net.fc_selector(x.clone()).tanh()
                 with torch.no_grad():
-                    style_ftr = style_net(data.clone()).detach()
-                style_selector = net.style_selector(x.clone()).tanh()
-                x = direct_feature + concept_selector * memory_feature + 0.01 * style_selector * style_ftr
-            elif style_cond == 3:
+                    domain_factor_ftr = domain_factor_net(data.clone()).detach()
+                domain_factor_selector = net.domain_factor_selector(x.clone()).tanh()
+                x = direct_feature + concept_selector * memory_feature + 0.01 * domain_factor_selector * domain_factor_ftr
+            elif domain_factor_cond == 3:
                 with torch.no_grad():
-                    style_ftr = style_net(data.clone()).detach()
-                domain_indicator = net.style_selector(style_ftr.clone()).tanh()
+                    domain_factor_ftr = domain_factor_net(data.clone()).detach()
+                domain_indicator = net.domain_factor_selector(domain_factor_ftr.clone()).tanh()
                 x = direct_feature + domain_indicator * memory_feature
-            elif style_cond == 4:
+            elif domain_factor_cond == 4:
                 # computing concept selector
                 concept_selector = net.fc_selector(x.clone()).tanh()
                 with torch.no_grad():
-                    style_ftr = style_net(data.clone()).detach()
-                style_selector = net.style_selector(style_ftr.clone()).tanh()
-                x = direct_feature + style_selector * concept_selector * memory_feature
+                    domain_factor_ftr = domain_factor_net(data.clone()).detach()
+                domain_factor_selector = net.domain_factor_selector(domain_factor_ftr.clone()).tanh()
+                x = direct_feature + domain_factor_selector * concept_selector * memory_feature
             else:
-                raise Exception("No such style_cond: {}".format(style_cond))
+                raise Exception("No such domain_factor_cond: {}".format(domain_factor_cond))
 
             if feat_exp:
                 total_feat = np.append(total_feat, x.clone().detach().cpu().numpy(), axis=0)
@@ -112,13 +113,13 @@ def test(loader, net, style_net, centers=False, style_cond=0, feat_exp=False, ou
 def load_and_test_net(args, data, datadir):
 
     weights = args.scheduled_net_file
-    style_weights = args.style_net_file
-    style_model = args.style_model
+    domain_factor_weights = args.domain_factor_net_file
+    domain_factor_model = args.domain_factor_model
     num_cls = args.num_cls
-    style_cond = args.style_cond,
+    domain_factor_cond = args.domain_factor_cond
     batch = args.batch
     dset = 'test'
-    base_model = args.base_model,
+    base_model = args.base_model
     centers = True
     centroids_path = args.centroids_src_file
     feat_exp = False
@@ -131,15 +132,14 @@ def load_and_test_net(args, data, datadir):
         kwargs = {}
 
     # pdb.set_trace()
-    # Eval tgt from AddaNet or TaskNet model #
-    net = get_model('DmeNet', num_cls=num_cls, weights_init=weights,
-                    model=base_model, use_style_selector=(style_cond != 0), centroids_path=centroids_path)
+    net = get_model('MannNet', num_cls=num_cls, weights_init=weights,
+                    model=base_model, use_domain_factor_selector=(domain_factor_cond != 0), centroids_path=centroids_path)
 
-    style_net = deepcopy(get_model('StyleNet', num_cls=num_cls,
-                                   base_model=base_model, style_model=style_model,
-                                   weights_init=style_weights, eval=True).style_net)
+    domain_factor_net = deepcopy(get_model('DomainFactorNet', num_cls=num_cls,
+                                   base_model=base_model, domain_factor_model=domain_factor_model,
+                                   weights_init=domain_factor_weights, eval=True).domain_factor_net)
 
-    style_net.eval()
+    domain_factor_net.eval()
 
     # Load data
     test_data = load_data_multi(data, dset, batch=batch, 
@@ -149,5 +149,5 @@ def load_and_test_net(args, data, datadir):
     if test_data is None:
         print('skipping test')
     else:
-        test(test_data, net, style_net, centers=centers, style_cond=style_cond, feat_exp=feat_exp, out_dir=outdir, dom=data)
+        test(test_data, net, domain_factor_net, centers=centers, domain_factor_cond=domain_factor_cond, feat_exp=feat_exp, out_dir=outdir, dom=data)
 

@@ -9,28 +9,28 @@ from ..data.utils import load_data_multi
 import pdb
 
 
-def extract_style_features(args):
+def extract_domain_factor_features(args):
 
     src = args.src
     tgt_list = args.tgt_list
     base_model = args.base_model
-    style_model = args.style_model
+    domain_factor_model = args.domain_factor_model
     num_cls = args.num_cls
     batch = args.batch
     datadir = args.datadir
-    outdir = args.outdir_style
-    weights = args.style_net_file
+    outdir = args.outdir_domain_factor
+    weights = args.domain_factor_net_file
 
     if torch.cuda.is_available():
         kwargs = {'num_workers': 8, 'pin_memory': True}
     else:
         kwargs = {}
 
-    net = get_model('StyleNet', num_cls=num_cls,
-                    base_model=base_model, style_model=style_model,
+    net = get_model('DomainFactorNet', num_cls=num_cls,
+                    base_model=base_model, domain_factor_model=domain_factor_model,
                     weights_init=weights, eval=True)
     print(net)
-    print('Extracting style features')
+    print('Extracting domain_factor features')
 
     src_data = load_data_multi(src, 'train', batch=batch,
                                rootdir=os.path.join(datadir, src), num_channels=net.num_channels,
@@ -42,9 +42,9 @@ def extract_style_features(args):
     net.eval()
 
     src_ftrs = extract_dataset(src_data, net)
-    src_ftrs.tofile(os.path.join(outdir, 'src_style_ftr.bin')) # N x 512
+    src_ftrs.tofile(os.path.join(outdir, 'src_domain_factor_ftr.bin')) # N x 512
     tgt_ftrs = extract_dataset(tgt_data, net)
-    tgt_ftrs.tofile(os.path.join(outdir, 'tgt_style_ftr.bin'))
+    tgt_ftrs.tofile(os.path.join(outdir, 'tgt_domain_factor_ftr.bin'))
 
 
 def extract_dataset(loader, net):
@@ -63,9 +63,9 @@ def extract_dataset(loader, net):
         data.require_grad = False
 
         with torch.no_grad():
-            style_ftr = net.style_net(data.clone()) # Bx512
+            domain_factor_ftr = net.domain_factor_net(data.clone()) # Bx512
 
-        ftrs.append(style_ftr.detach().cpu().numpy())
+        ftrs.append(domain_factor_ftr.detach().cpu().numpy())
 
         if batch_idx % 100 == 0:
             print(info_str)

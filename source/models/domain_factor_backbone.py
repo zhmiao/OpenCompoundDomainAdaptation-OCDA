@@ -3,11 +3,11 @@ import torch.nn as nn
 from .utils import register_model
 
 
-@register_model('StyleBackbone')
-class StyleBackbone(nn.Module):
+@register_model('DomainFactorBackbone')
+class DomainFactorBackbone(nn.Module):
 
     def __init__(self):
-        super(StyleBackbone, self).__init__()
+        super(DomainFactorBackbone, self).__init__()
         self.num_channels = 3
         self.setup_net()
         
