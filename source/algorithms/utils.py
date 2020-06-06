@@ -27,7 +27,7 @@ def compute_source_centroids(args):
     model = args.base_model
     num_cls = args.num_cls
     save_path = args.centroids_src_file
-    batch = args.batch,
+    batch = args.batch
     dset = 'train'
     base_model = None
     feat_dim = 512
