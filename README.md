@@ -38,10 +38,15 @@ Further information please contact [Zhongqi Miao](mailto:zhongqi.miao@berkeley.e
 
 ### C-Digits
 
+|  Source  |    MNIST (C)   |  MNIST-M (C)  |   USPS (C)  |  SymNum (O)  |   Avg. Acc   |      Download      |
+| :------: | :------------: | :-----------: | :---------: | :----------: | :----------: | :----------------: |
+|   SVHN   |                |               |             |              |              |      [model]()     |
 
 ### C-Faces
 
-
+|  Source  |    C08 (C)   |    C09 (C)  |    C13 (C)  |    C14 (C)  |    C19 (O)  |   Avg. Acc   |      Download      |
+| :------: | :----------: | :---------: | :---------: | :---------: | :---------: | :----------: | :----------------: |
+|   C05    |              |             |             |             |             |              |      [model]()     |
 
 ## License and Citation
 The use of this software is released under [BSD-3](https://github.com/zhmiao/OpenCompoundDomainAdaptation-OCDA/blob/master/LICENSE).
