@@ -8,7 +8,7 @@
 [Ziwei Liu](https://liuziwei7.github.io/)<sup>\*</sup>,&nbsp; [Zhongqi Miao](https://github.com/zhmiao)<sup>\*</sup>,&nbsp; [Xingang Pan](https://xingangpan.github.io/),&nbsp; [Xiaohang Zhan](https://xiaohangzhan.github.io/),&nbsp; [Dahua Lin](http://dahua.me/),&nbsp; [Stella X. Yu](https://www1.icsi.berkeley.edu/~stellayu/),&nbsp; [Boqing Gong](http://boqinggong.info/)&nbsp; (CUHK & Berkeley & Google)&nbsp; 
 in IEEE Conference on Computer Vision and Pattern Recognition (CVPR) 2020, **Oral Presentation**
 
-<img src='./assets/intro.png' width=800>
+<img src='./assets/intro.png' width=900>
 
 Further information please contact [Zhongqi Miao](mailto:zhongqi.miao@berkeley.edu) and [Ziwei Liu](https://liuziwei7.github.io/).
 
@@ -18,13 +18,13 @@ Further information please contact [Zhongqi Miao](mailto:zhongqi.miao@berkeley.e
 
 ## Data Preparation
 
-<img src='./assets/dataset.png' width=800>
+<img src='./assets/dataset.png' width=500>
 
 
 
 ## Getting Started (Training & Testing)
 
-<img src='./assets/pipeline.png' width=800>
+<img src='./assets/pipeline.png' width=900>
 
 ### C-Digits
 
