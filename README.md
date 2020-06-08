@@ -39,7 +39,7 @@ python main.py --config ./config svhn_bal_to_multi.yaml
 
 ## Reproduced Benchmarks and Model Zoo (We will be releasing reimplemented model very soon.)
 
-### C-Digits (Results may currently have variations, and bugs may appear in current released version.)
+### C-Digits (Results may currently have variations.)
 
 |  Source  |    MNIST (C)   |  MNIST-M (C)  |   USPS (C)  |  SymNum (O)  |   Avg. Acc   |      Download      |
 | :------: | :------------: | :-----------: | :---------: | :----------: | :----------: | :----------------: |
