@@ -20,7 +20,7 @@ Further information please contact [Zhongqi Miao](mailto:zhongqi.miao@berkeley.e
 
 <img src='./assets/dataset.png' width=500>
 
-
+* We will be publishing the data really soon!
 
 ## Getting Started (Training & Testing)
 
@@ -28,21 +28,24 @@ Further information please contact [Zhongqi Miao](mailto:zhongqi.miao@berkeley.e
 
 ### C-Digits
 
-
+To run experiments on the C-Digits datasets (SVHN -> Multi):
+```bash
+python main.py --config ./config svhn_bal_to_multi.yaml
+```
 
 ### C-Faces
 
+* We will be releasing code for C-Faces experiements very soon.
 
+## Reproduced Benchmarks and Model Zoo (We will be releasing reimplemented model very soon.)
 
-## Reproduced Benchmarks and Model Zoo
-
-### C-Digits
+### C-Digits (Results may currently have variations, and bugs may appear in current released version.)
 
 |  Source  |    MNIST (C)   |  MNIST-M (C)  |   USPS (C)  |  SymNum (O)  |   Avg. Acc   |      Download      |
 | :------: | :------------: | :-----------: | :---------: | :----------: | :----------: | :----------------: |
-|   SVHN   |                |               |             |              |              |      [model]()     |
+|   SVHN   |      89.62     |     64.53     |    81.17    |    87.86     |    80.80     |      [model]()     |
 
-### C-Faces
+### C-Faces (Will update soon.)
 
 |  Source  |    C08 (C)   |    C09 (C)  |    C13 (C)  |    C14 (C)  |    C19 (O)  |   Avg. Acc   |      Download      |
 | :------: | :----------: | :---------: | :---------: | :---------: | :---------: | :----------: | :----------------: |
