@@ -1,6 +1,6 @@
 # Open Compound Domain Adaptation
 
-[[Project]](https://liuziwei7.github.io/projects/CompoundDomain.html) [[Paper]](https://arxiv.org/abs/1909.03403)
+[[Project]](https://liuziwei7.github.io/projects/CompoundDomain.html) [[Paper]](https://arxiv.org/abs/1909.03403) [[Blog]](https://bair.berkeley.edu/blog/2020/06/14/ocda/)
 
 ## Overview
 `Open Compound Domain Adaptation (OCDA)` is the author's re-implementation of the compound domain adaptator described in:  
