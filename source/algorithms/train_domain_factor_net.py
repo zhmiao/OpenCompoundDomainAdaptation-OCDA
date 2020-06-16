@@ -232,19 +232,8 @@ def train_domain_factor_multi(args):
     ##############
     for epoch in range(num_epoch):
 
-        if epoch % 5 == 0:
-            os.makedirs(outdir, exist_ok=True)
-            outfile = join(outdir, 'DomainFactorNet_{:s}_net_{:s}_{:s}_ep_{}.pth'.format(
-                domain_factor_model, src, tgt, epoch))
-            print('Saving to', outfile)
-            net.save(outfile)
-
         err = train_epoch(train_src_data, train_tgt_data, net, opt_domain_factor, opt_decoder, opt_dis_cls,
                           epoch, gamma_dispell, gamma_rec, num_cls, fake_label_type)
-
-        # if err == -1:
-        #     print("No suitable discriminator")
-        #     break
 
     ######################
     # Save Total Weights #
