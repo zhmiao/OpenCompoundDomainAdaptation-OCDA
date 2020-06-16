@@ -1,5 +1,5 @@
 # common
-datadir: "/home/zhmiao/datasets/digits/"
+datadir: "/home/zhmiao/datasets/digits/"  # Please change this directory accordingly
 src: "svhn_bal"
 tgt: "multi"
 tgt_list: ['mnist', 'mnistm', 'usps']

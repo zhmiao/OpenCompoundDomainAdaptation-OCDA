@@ -16,11 +16,16 @@ Further information please contact [Zhongqi Miao](mailto:zhongqi.miao@berkeley.e
 * [PyTorch](https://pytorch.org/) (version >= 0.4.1)
 * [scikit-learn](https://scikit-learn.org/stable/)
 
+## Updates:
+* 06/16/2020: We have released C-Digits dataset and corresponding weights. 
+
 ## Data Preparation
 
 <img src='./assets/dataset.png' width=500>
 
-* We will be publishing the data really soon!
+First, please download [C-Digits](https://drive.google.com/file/d/1ro-up5YDq1Cm9n_JaOG9pRbfPYVxcV8P/view?usp=sharing), save it to a directory, and change the dataset root in the config file accordingly.
+The file contains MNIST, MNIST-M, SVHN, SVHN-bal, and SynNum. 
+
 
 ## Getting Started (Training & Testing)
 
@@ -28,22 +33,29 @@ Further information please contact [Zhongqi Miao](mailto:zhongqi.miao@berkeley.e
 
 ### C-Digits
 
-To run experiments on the C-Digits datasets (SVHN -> Multi):
+To run experiments for both training and evaluation on the C-Digits datasets (SVHN -> Multi):
 ```bash
 python main.py --config ./config svhn_bal_to_multi.yaml
 ```
+After training is completed, the same command will automatically evaluate the trained models.
 
 ### C-Faces
 
 * We will be releasing code for C-Faces experiements very soon.
 
-## Reproduced Benchmarks and Model Zoo (We will be releasing reimplemented model very soon.)
+## Reproduced Benchmarks and Model Zoo 
+
+NOTE: All reproduced weights need to be decompressed into results directory:
+```
+OpenCompoundedDomainAdaptation-OCDA
+    |--results
+```
 
 ### C-Digits (Results may currently have variations.)
 
 |  Source  |    MNIST (C)   |  MNIST-M (C)  |   USPS (C)  |  SymNum (O)  |   Avg. Acc   |      Download      |
 | :------: | :------------: | :-----------: | :---------: | :----------: | :----------: | :----------------: |
-|   SVHN   |      89.62     |     64.53     |    81.17    |    87.86     |    80.80     |      [model]()     |
+|   SVHN   |      8 w9.62     |     64.53     |    81.17    |    87.86     |    80.80     |      [model](https://drive.google.com/file/d/1RCMYC-NBwZQnPcDXIEIqn_z8EsDqv1a2/view?usp=sharing)     |
 
 ### C-Faces (Will update soon.)
 
