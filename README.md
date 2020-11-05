@@ -55,7 +55,7 @@ OpenCompoundedDomainAdaptation-OCDA
 
 |  Source  |    MNIST (C)   |  MNIST-M (C)  |   USPS (C)  |  SymNum (O)  |   Avg. Acc   |      Download      |
 | :------: | :------------: | :-----------: | :---------: | :----------: | :----------: | :----------------: |
-|   SVHN   |      8 w9.62     |     64.53     |    81.17    |    87.86     |    80.80     |      [model](https://drive.google.com/file/d/1RCMYC-NBwZQnPcDXIEIqn_z8EsDqv1a2/view?usp=sharing)     |
+|   SVHN   |      89.62     |     64.53     |    81.17    |    87.86     |    80.80     |      [model](https://drive.google.com/file/d/1RCMYC-NBwZQnPcDXIEIqn_z8EsDqv1a2/view?usp=sharing)     |
 
 ### C-Faces (Will update soon.)
 
