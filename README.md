@@ -17,6 +17,7 @@ Further information please contact [Zhongqi Miao](mailto:zhongqi.miao@berkeley.e
 * [scikit-learn](https://scikit-learn.org/stable/)
 
 ## Updates:
+* 11/09/2020: We have uploaded C-Faces dataset. Corresponding codes will be updated shortly. Please be patient. Thank you very much!
 * 06/16/2020: We have released C-Digits dataset and corresponding weights. 
 
 ## Data Preparation
@@ -25,6 +26,8 @@ Further information please contact [Zhongqi Miao](mailto:zhongqi.miao@berkeley.e
 
 First, please download [C-Digits](https://drive.google.com/file/d/1ro-up5YDq1Cm9n_JaOG9pRbfPYVxcV8P/view?usp=sharing), save it to a directory, and change the dataset root in the config file accordingly.
 The file contains MNIST, MNIST-M, SVHN, SVHN-bal, and SynNum. 
+
+For C-Faces, please download [Multi-PIE](http://www.cs.cmu.edu/afs/cs/project/PIE/MultiPie/Multi-Pie/Home.html) first. Since it is a proprietary dataset, we can only privide the data list we used during training [here](https://drive.google.com/file/d/1OGPAJz5OXelzRE0kEhyU8h4cqgbewj_r/view?usp=sharing). We will update the dataset function accordingly. 
 
 
 ## Getting Started (Training & Testing)
