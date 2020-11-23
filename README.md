@@ -24,6 +24,8 @@ Further information please contact [Zhongqi Miao](mailto:zhongqi.miao@berkeley.e
 
 <img src='./assets/dataset.png' width=500>
 
+[[OCDA Datasets]](https://drive.google.com/drive/folders/1_uNTF8RdvhS_sqVTnYx17hEOQpefmE2r?usp=sharing)
+
 First, please download [C-Digits](https://drive.google.com/file/d/1ro-up5YDq1Cm9n_JaOG9pRbfPYVxcV8P/view?usp=sharing), save it to a directory, and change the dataset root in the config file accordingly.
 The file contains MNIST, MNIST-M, SVHN, SVHN-bal, and SynNum. 
 
@@ -45,6 +47,10 @@ After training is completed, the same command will automatically evaluate the tr
 ### C-Faces
 
 * We will be releasing code for C-Faces experiements very soon.
+
+### C-Driving
+
+* Please refer to: https://github.com/XingangPan/OCDA-Driving-Example .
 
 ## Reproduced Benchmarks and Model Zoo 
 
