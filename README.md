@@ -66,12 +66,6 @@ OpenCompoundedDomainAdaptation-OCDA
 | :------: | :------------: | :-----------: | :---------: | :----------: | :----------: | :----------------: |
 |   SVHN   |      89.62     |     64.53     |    81.17    |    87.86     |    80.80     |      [model](https://drive.google.com/file/d/1RCMYC-NBwZQnPcDXIEIqn_z8EsDqv1a2/view?usp=sharing)     |
 
-### C-Faces (Will update soon.)
-
-|  Source  |    C08 (C)   |    C09 (C)  |    C13 (C)  |    C14 (C)  |    C19 (O)  |   Avg. Acc   |      Download      |
-| :------: | :----------: | :---------: | :---------: | :---------: | :---------: | :----------: | :----------------: |
-|   C05    |              |             |             |             |             |              |      [model]()     |
-
 ## License and Citation
 The use of this software is released under [BSD-3](https://github.com/zhmiao/OpenCompoundDomainAdaptation-OCDA/blob/master/LICENSE).
 ```
